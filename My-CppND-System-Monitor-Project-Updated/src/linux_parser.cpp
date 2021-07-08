@@ -4,7 +4,6 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-
 #include "format.h"
 #include "linux_parser.h"
 #include "processor.h"
@@ -16,22 +15,23 @@ using std::vector;
 using std::ifstream;
 using std::getline;
 using std::istringstream;
+using std::replace;
 
 
 string LinuxParser::OperatingSystem() {
   string line;
   string key;
   string value;
-  std::ifstream filestream(kOSPath);
+  ifstream filestream(kOSPath);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
-      std::replace(line.begin(), line.end(), ' ', '_');
-      std::replace(line.begin(), line.end(), '=', ' ');
-      std::replace(line.begin(), line.end(), '"', ' ');
-      std::istringstream linestream(line);
+      replace(line.begin(), line.end(), ' ', '_');
+      replace(line.begin(), line.end(), '=', ' ');
+      replace(line.begin(), line.end(), '"', ' ');
+      istringstream linestream(line);
       while (linestream >> key >> value) {
         if (key == "PRETTY_NAME") {
-          std::replace(value.begin(), value.end(), '_', ' ');
+          replace(value.begin(), value.end(), '_', ' ');
           return value;
         }
       }
@@ -76,13 +76,16 @@ vector<int> LinuxParser::Pids() {
 
 float LinuxParser::MemoryUtilization() { 
   ifstream file(kProcDirectory + kMeminfoFilename);
-  float number, memtotal, memfree;
-  
-  string line, other_line;
+  float number;
+  float memtotal;
+  float memfree;
+  string line;
+  string other_line;
+	
   if (file.is_open()) {
     while (getline(file, line)) {
       istringstream whole_line(line);
-      int i;
+      int i = 0;
 
       while (whole_line >> other_line >> number) {
          if(other_line == "MemTotal:"){
@@ -91,11 +94,8 @@ float LinuxParser::MemoryUtilization() {
          if(other_line == "MemFree:"){
             memfree = number;
          }
-
 		i++;
       }
-
-
     }
   }
   float totalmemused = memtotal - memfree;
@@ -155,14 +155,9 @@ float LinuxParser::ActiveJiffies(int pid) {
   
   seconds = LinuxParser::UpTime(pid);
      
-  
-     
   cpu_use = (total_time / sysconf(_SC_CLK_TCK)) / seconds;
      
-  return cpu_use;
-  
-  
-                                                         
+  return cpu_use;                                                    
 }
 
 long LinuxParser::ActiveJiffies() { 
