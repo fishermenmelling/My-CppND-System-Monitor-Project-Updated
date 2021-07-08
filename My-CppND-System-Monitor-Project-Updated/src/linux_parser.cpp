@@ -101,7 +101,6 @@ float LinuxParser::MemoryUtilization() {
   float totalmemused = memtotal - memfree;
     
   return totalmemused / memtotal;
-
 }
 
 
@@ -111,15 +110,6 @@ long LinuxParser::UpTime() {
   file >> line;
   return line; 
 }
-
-
-long LinuxParser::Jiffies() { 
-  //this doesn't really do anything
-  Processor processor;
-  return stol(processor.system_jiffies); 
-
-}
-
 
 float LinuxParser::ActiveJiffies(int pid) { 
   
@@ -159,22 +149,6 @@ float LinuxParser::ActiveJiffies(int pid) {
      
   return cpu_use;                                                    
 }
-
-long LinuxParser::ActiveJiffies() { 
-  //this doesn't really do anything
-   Processor processor;
-  return stol(processor.active_jiffies);
-              
-}
-
-long LinuxParser::IdleJiffies() { 
-  //this doesn't really do anything
-  Processor processor;
-  return stol(processor.idle_jiffies);
-}
-
-vector<string> LinuxParser::CpuUtilization() { return {}; }
-
 
 int LinuxParser::TotalProcesses() { 
   
@@ -218,7 +192,6 @@ string LinuxParser::Command(int pid) {
  string line;
  getline(file, line);
  return line; 
-                                                     
 }
 
 
@@ -280,3 +253,28 @@ long LinuxParser::UpTime(int pid) {
   }
   return 0;
 }
+
+/*
+Some orginal code that was modified by me and then found no use for at the end.
+
+
+long LinuxParser::ActiveJiffies() { 
+  //this doesn't really do anything
+   Processor processor;
+  return stol(processor.active_jiffies);
+}
+
+long LinuxParser::IdleJiffies() { 
+  //this doesn't really do anything
+  Processor processor;
+  return stol(processor.idle_jiffies);
+}
+
+long LinuxParser::Jiffies() { 
+  //this doesn't really do anything
+  Processor processor;
+  return stol(processor.system_jiffies);
+}
+
+vector<string> LinuxParser::CpuUtilization() { return {}; }
+*/
