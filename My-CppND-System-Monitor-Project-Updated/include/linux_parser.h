@@ -27,7 +27,19 @@ int RunningProcesses();
 std::string OperatingSystem();
 std::string Kernel();
 
-// CPU
+float ActiveJiffies(int pid);
+
+
+// Processes
+std::string Command(int pid);
+std::string Ram(int pid);
+std::string Uid(int pid);
+std::string User(int pid);
+long int UpTime(int pid);
+};  // namespace LinuxParser
+
+/* CPU (found this code after I already made the code that was supposed to use it)
+
 enum CPUStates {
   kUser_ = 0,
   kNice_,
@@ -40,18 +52,11 @@ enum CPUStates {
   kGuest_,
   kGuestNice_
 };
+
 std::vector<std::string> CpuUtilization();
 long Jiffies();
 long ActiveJiffies();
-float ActiveJiffies(int pid);
 long IdleJiffies();
-
-// Processes
-std::string Command(int pid);
-std::string Ram(int pid);
-std::string Uid(int pid);
-std::string User(int pid);
-long int UpTime(int pid);
-};  // namespace LinuxParser
+*/
 
 #endif
